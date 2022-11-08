@@ -77,7 +77,7 @@ def load_config(default_options, cli_options):
     return all_options
 
 def parse_args():
-    parser = argparse.ArgumentParser(description='Business Journey Corelator')
+    parser = argparse.ArgumentParser(description='Rockset Script Step Launcher')
     parser.add_argument('-v', '--verbose', help='print information to the screen', action="store_true")
     # parser.add_argument('--nolog', help='suppresses output log', action="store_true")
     parser.add_argument('-c', '--config', help='yaml configuration file with test parameters', default='./resources/config.yaml')
@@ -88,7 +88,7 @@ def parse_args():
     options['config_file'] = args.config
     options['verbose'] = args.verbose
     
-    options['verbose'] = True # TODO Remove after dev
+    # options['verbose'] = True # TODO Remove after dev
     
     # options['output_dir'] = args.output_dir
     # options['log_output'] = not args.nolog
@@ -102,15 +102,13 @@ if __name__ == "__main__":
     cli_options = parse_args()
     default_options = default_options()
     all_options = load_config(default_options, cli_options)
-    print("Options:")
-    print(all_options)
-    creator = CollectionCreator(all_options)
-    result = creator.execute()
-    waiter = ReadyWaiter(all_options)
-    result = waiter.execute()
-    swizzler = AliasSwizzler(all_options)
-    result = swizzler.execute()
+    result = CollectionCreator(all_options).execute()
+    all_options.update(result)
+    result = ReadyWaiter(all_options).execute()
+    all_options.update(result)
+    result = AliasSwizzler(all_options).execute()
+    all_options.update(result)
     if 'old_collection_name' in all_options:
-        deleter = CollectionDeletor(all_options)
-        deleter.execute()
-    if swizzler.isVerbose() : print(result)
+        result = CollectionDeletor(all_options).execute()
+        all_options.update(result)
+
