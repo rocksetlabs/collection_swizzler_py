@@ -1,44 +1,27 @@
-import json, sys, requests, time
+import sys, requests
+from BaseStep import BaseStep
 
-class AliasSwizzler():
+class AliasSwizzler(BaseStep):
     def __init__(self, options):
-        self.options_dict = options
-
-    def isVerbose(self):
-        return self.option('verbose')
-
-    def option(self, key):
-        if key in self.options_dict:
-            return self.options_dict[key]
-        else:
-            raise KeyError(f"Request for unavailable option: {key}") 
-
-    def hasOption(self, key):
-        return key in self.options_dict
+        super().__init__(options)
 
     def execute(self):
-        if self.isVerbose :  print(f"Creating Alias {self.option('target_alias_workspace')}.{self.option('target_alias_name')}")
         
-        #Look to see if the alias already exists
+        # Construct the payload for create/update alias call
         payload = dict()
         collections = list()
         collections.append(f"{self.option('new_collection_workspace')}.{self.option('new_collection_name')}")
         payload['collections'] = collections
+
+        #Look to see if the alias already exists
         qryResopnse = requests.get(
             f"{self.option('baseURL')}ws/{self.option('target_alias_workspace')}/aliases/{self.option('target_alias_name')}",
-            json = payload,
             headers = self.option('headers')
         )
 
-        # Construct the payload for create/update alias call
-        if self.isVerbose :  print(f"Creating new Alias {self.option('target_alias_workspace')}.{self.option('target_alias_name')}")
-        payload = dict()
-        collections = list()
-        collections.append(f"{self.option('new_collection_workspace')}.{self.option('new_collection_name')}")
-        payload['collections'] = collections
-
         if qryResopnse.status_code == 404:
             # The alias doesn't exist, so create it
+            if self.isVerbose :  print(f"Creating new Alias {self.option('target_alias_workspace')}.{self.option('target_alias_name')}")
             payload['name'] = self.option('target_alias_name')
             qryResopnse = requests.post(
                 f"{self.option('baseURL')}ws/{self.option('target_alias_workspace')}/aliases",
@@ -48,7 +31,7 @@ class AliasSwizzler():
             if qryResopnse.status_code != 200:
                 sys.exit(f"AliasSwizzler had unexpected error creating a new alias: \n\t {qryResopnse.reason} \n\t {qryResopnse.text}")
 
-            response = {'status': 'Successful'}
+            response = {'last_status': 'Successful', 'last_step': 'Swizzle Alias'}
             return response
 
         elif qryResopnse.status_code != 200:
@@ -65,5 +48,5 @@ class AliasSwizzler():
         if qryResopnse.status_code != 200:
             sys.exit(f"AliasSwizzler had unexpected error updating alias {self.option('target_alias_workspace')}.{self.option('target_alias_name')}:  \n\t {qryResopnse.reason} \n\t {qryResopnse.text}")
             
-        response = {'status': 'Successful'}
+        response = {'last_status': 'Successful', 'last_step': 'Swizzle Alias'}
         return response

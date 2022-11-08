@@ -1,20 +1,9 @@
 import json, sys, requests
+from BaseStep import BaseStep
 
-class CollectionCreator():
+class CollectionCreator(BaseStep):
     def __init__(self, options):
-        self.options_dict = options
-
-    def isVerbose(self):
-        return self.option('verbose')
-
-    def option(self, key):
-        if key in self.options_dict:
-            return self.options_dict[key]
-        else:
-            raise KeyError(f"Request for unavailable option: {key}") 
-
-    def hasOption(self, key):
-        return key in self.options_dict
+        super().__init__(options)
 
     def execute(self):
         if self.isVerbose :  print(f"Creating Collection {self.option('new_collection_workspace')}.{self.option('new_collection_name')}")
@@ -47,5 +36,5 @@ class CollectionCreator():
         if qryResopnse.status_code != 200:
            sys.exit(f"Collection Creator had unexpected error creating {self.option('new_collection_workspace')}.{self.option('new_collection_name')}: \n\t {qryResopnse.reason} \n\t {qryResopnse.text}")
 
-        response = {'status': 'Successful'}
+        response = {'last_status': 'Successful', 'last_step': 'Create New Collection'}
         return response
