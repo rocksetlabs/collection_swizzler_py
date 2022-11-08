@@ -1,0 +1,16 @@
+options:
+  api_server:  api.usw2a1.rockset.com
+  new_collection_workspace: david
+  new_collection_name: test_coll_v5
+  source_integration: Sales-Eng-PoC
+  source_s3_region: us-west-2
+  source_s3_bucket: s3://customer-poc-data
+  source_s3_pattern: rockset/awsDemo/accounts.json
+  # sqlTransform: some SQL String
+  # retention_secs: some integer 
+  collection_wait_time_sec: 60
+  collection_wait_poll_sec: 10
+  target_alias_name : test_alias
+  target_alias_workspace : david
+  old_collection_workspace: david
+  old_collection_name: test_coll_v4

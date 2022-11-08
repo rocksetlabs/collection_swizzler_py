@@ -127,3 +127,5 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+collection_swizzler_py.code-workspace
+.vscode/launch.json
