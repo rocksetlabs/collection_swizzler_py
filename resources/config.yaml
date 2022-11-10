@@ -1,7 +1,7 @@
 options:
   api_server:  api.usw2a1.rockset.com
   new_collection_workspace: david
-  new_collection_name: test_coll_v4
+  new_collection_name: test_coll_v1
   source_integration: Sales-Eng-PoC
   source_s3_region: us-west-2
   source_s3_bucket: s3://customer-poc-data
@@ -13,8 +13,8 @@ options:
   target_alias_workspace : david
 
   # Optional - remove the old collection once the new one is created
-  #old_collection_workspace: david
-  #old_collection_name: test_coll_v3
+  old_collection_workspace: david
+  old_collection_name: test_coll_v4
 
   # Optional - provide a SQL transform or retention period for the new collection
   # sqlTransform: some SQL String

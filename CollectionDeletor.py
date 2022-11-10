@@ -6,7 +6,7 @@ class CollectionDeletor(BaseStep):
         super().__init__(options)
 
     def execute(self):
-        if self.isVerbose :  print(f"Deleting Collection {self.option('old_collection_workspace')}.{self.option('old_collection_name')}")
+        if self.isVerbose() :  print(f"Deleting Collection {self.option('old_collection_workspace')}.{self.option('old_collection_name')}")
 
         qryResopnse = requests.delete(
             f"{self.option('baseURL')}ws/{self.option('old_collection_workspace')}/collections/{self.option('old_collection_name')}",

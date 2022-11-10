@@ -6,7 +6,8 @@ this code has not necessarily handled errors in a way that is appropriate for yo
 
 
 The code consists of:
-- *launcher.py* which is generic code for processing a configuration file and providing simple command line arguements for key parameters
+- *script.py* which is a superclass for processing a configuration file and providing simple command line arguements for key parameters
+- a series of script classes that extend script and run a series of steps (e.g. BulkLoadAndAlias.py)
 - a series of Step classes that are orchestrated in the __main__ function of the launcher in order to manifest a series of commands
 - an example configuration file in *resources/config.yaml* - this file location and name can be overridden via the command line
 
@@ -14,7 +15,7 @@ The Step classes are designed to be modular so that they could be used in multip
 
 Execute the launcher using:
 ```
-python launcher.py
+python <script class>.py
 
 optional arguments:
   -h, --help            show this help message and exit

@@ -6,7 +6,7 @@ class CollectionCreator(BaseStep):
         super().__init__(options)
 
     def execute(self):
-        if self.isVerbose :  print(f"Creating Collection {self.option('new_collection_workspace')}.{self.option('new_collection_name')}")
+        if self.isVerbose() :  print(f"Creating Collection {self.option('new_collection_workspace')}.{self.option('new_collection_name')}")
         payload = dict()
         payload['name'] = self.option('new_collection_name')
         sources = list()
